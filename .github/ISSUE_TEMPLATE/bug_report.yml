@@ -1,0 +1,107 @@
+name: Bug report
+description: Something in the bookmarklet or the page is not working as it should.
+title: '[bug]: '
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting it. The more complete the report, the faster it gets fixed.
+
+        If this is a **security** problem, do not report it here: use the
+        [repository's Security Advisories](https://github.com/vilaslautaro/ecom-toolkit/security/advisories/new).
+
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Before opening the issue
+      options:
+        - label: I searched the open and closed issues and did not find this problem.
+          required: true
+        - label: I am on the currently published version (I reloaded the page and regenerated the bookmark).
+          required: true
+
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Where did it happen?
+      description: Which mode you were using the bookmarklet in.
+      options:
+        - Meta Ad Library
+        - Shopify store
+        - On the Ecom Toolkit page (while generating the bookmark)
+        - In both modes
+        - Not sure
+    validations:
+      required: true
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      description: Look it up in your browser's "About" screen.
+      placeholder: 'Chrome 141.0.7390.65 on Windows 11'
+    validations:
+      required: true
+
+  - type: input
+    id: url
+    attributes:
+      label: Example URL
+      description: The exact URL where it reproduces (Ad Library search or Shopify store). Do not paste URLs containing private data.
+      placeholder: 'https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=AR&q=zapatillas'
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: One per line, including the bookmarklet configuration if you changed it.
+      value: |
+        1. I went to ...
+        2. I configured the bookmark with ... (minAds, type, total, etc.)
+        3. I clicked the bookmark
+        4. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected to happen
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: What actually happened
+    validations:
+      required: true
+
+  - type: textarea
+    id: log
+    attributes:
+      label: Panel log
+      description: Copy and paste what the bookmarklet panel log said. If there were errors in the browser console (F12), paste those too.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: Optional. Drag the images here. Cover up any personal data.
+    validations:
+      required: false
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Additional context
+      description: Active extensions or blockers, whether the browser showed its multiple-downloads prompt ("¿Permitir descargar varios archivos?"), whether it happens always or only sometimes, etc.
+    validations:
+      required: false

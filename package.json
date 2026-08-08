@@ -1,0 +1,37 @@
+{
+  "name": "ecom-toolkit",
+  "version": "1.0.0",
+  "private": false,
+  "description": "Bookmarklet that downloads creatives from the Meta Ad Library and inspects Shopify stores",
+  "license": "MIT",
+  "author": "Lautaro Vilas (https://github.com/vilaslautaro)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vilaslautaro/ecom-toolkit.git"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsx scripts/build.ts",
+    "build:check": "tsx scripts/build.ts --check",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:adlib": "ADLIB_LIVE=1 playwright test tests/e2e/ad-library.spec.ts --headed",
+    "serve": "tsx scripts/serve.ts"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "@types/jsdom": "^30.0.0",
+    "@types/node": "^26.2.0",
+    "esbuild": "^0.28.1",
+    "jsdom": "^26.0.0",
+    "tsx": "^4.23.11",
+    "typescript": "^5.9.3",
+    "vitest": "^3.0.0"
+  }
+}

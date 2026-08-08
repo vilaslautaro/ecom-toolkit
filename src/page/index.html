@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ecom Toolkit</title>
+<!--{{STYLES}}-->
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <div class="badge">Ecom Toolkit</div>
+    <h1>🧰 Un botón para analizar tiendas y descargar anuncios</h1>
+    <p>Arrastralo a tu navegador y tocalo donde estés: detecta solo si es una tienda Shopify o la Ad Library de Meta. Sin instalar nada.</p>
+  </div>
+
+  <div class="card">
+    <p style="margin:0 0 12px;color:#cdd5e1;font-size:13.5px">Arrastrá este botón a tu <b>barra de marcadores</b> (arriba de todo):</p>
+    <a class="drag" id="dragBtn" href="#" onclick="return false" draggable="true" style="display:block">🧰 Ecom Toolkit</a>
+    <ol class="steps">
+      <li>¿No ves la barra de marcadores? Mostrala con <span class="kbd">Ctrl</span>+<span class="kbd">Shift</span>+<span class="kbd">B</span> (Windows) o <span class="kbd">⌘</span>+<span class="kbd">Shift</span>+<span class="kbd">B</span> (Mac).</li>
+      <li>Arrastrá el botón azul de arriba a esa barra.</li>
+      <li>Entrá a una tienda Shopify o a la Ad Library y hacé clic en el marcador. El panel aparece arriba a la derecha.</li>
+    </ol>
+    <div class="help" style="margin-top:12px">Alternativa (si no podés arrastrar): creá un marcador nuevo, editalo y pegá el código en el campo "URL".</div>
+    <button class="ghost full" style="margin-top:6px" id="copyBm">📋 Copiar el código</button>
+    <div class="out" id="bmOut"></div>
+  </div>
+
+  <div class="alert">
+    <b>⚠ Para descargar (configuralo una sola vez):</b> en la configuración de <b>Descargas</b> de tu navegador, elegí tu carpeta destino y, si está activada, desactivá <b>"Preguntar dónde guardar cada archivo antes de descargarlo"</b> (Chrome/Edge la traen activada; en Safari ya baja directo). Si al bajar aparece <b>"¿Permitir descargar varios archivos?"</b>, tocá <b>Permitir</b>.
+  </div>
+
+  <div class="card">
+    <div class="step"><h2>🛍️ En una tienda Shopify</h2></div>
+    <div class="showcase">
+      <div class="mock">
+        <div class="mock-h">🧰 Ecom Toolkit <span style="float:right;opacity:.5">✕</span></div>
+        <div style="color:#8ec5ff;font-size:11px;margin:2px 0 8px">nombretienda.com</div>
+        <div style="font-weight:700;font-size:12px;margin-bottom:6px">🏆 Top 3 más vendidos</div>
+        <div class="mrow"><span class="mn">1</span><div class="mth"></div><div><div class="mt">Producto más vendido</div><div class="mp">$ 214999.99</div></div></div>
+        <div class="mrow"><span class="mn">2</span><div class="mth"></div><div><div class="mt">Segundo más vendido</div><div class="mp">$ 152240.00</div></div></div>
+        <div class="mstats">📦 Productos: <b>115</b><br>💲 ARS 15225 – 761275 <span style="opacity:.6">(prom 107392)</span><br>🗓 Primer: <b>23/1/2024</b> · 🆕 Último: <b>6/8/2026</b></div>
+        <div class="mbtn" style="background:#3b82f6">🔎 Ver anuncios</div>
+        <div class="mbtn" style="background:#2b313b;border:1px solid #3a4150">🖼️ Descargar todas las imágenes</div>
+        <div class="mbtn" style="background:#2b313b;border:1px solid #3a4150">🎬 Descargar todos los videos</div>
+      </div>
+      <ul class="ex">
+        <li><b>🏆 Top 3 más vendidos</b> — los productos con más ventas de la tienda (orden real best-selling de Shopify), con foto y precio.</li>
+        <li><b>📦 Productos</b> — cuántos productos tiene (sin contar add-ons como seguros de envío o regalos).</li>
+        <li><b>💲 Precios</b> — el más barato, el más caro y el promedio.</li>
+        <li><b>🗓 Fechas</b> — cuándo publicó su primer y su último producto (te dice qué tan nueva es y si sigue moviéndose).</li>
+        <li><b>🔎 Ver anuncios</b> — abre los anuncios de esa tienda en la Ad Library.</li>
+        <li><b>🖼️ Descargar todas las imágenes</b> — baja todas las imágenes grandes de la página (y las del producto si estás en una ficha).</li>
+        <li><b>🎬 Descargar todos los videos</b> — baja los videos de la página (y los del producto si estás en una ficha).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="step"><h2>📥 En la Ad Library de Meta</h2></div>
+    <div class="showcase">
+      <div class="mock">
+        <div class="mock-h">🧰 Ecom Toolkit <span style="float:right;opacity:.5">✕</span></div>
+        <div style="color:#8ec5ff;font-size:11px;margin:2px 0 9px">Anuncios en esta búsqueda: ~550</div>
+        <div class="mfield">Mín. anuncios que repiten<div class="minp">2</div></div>
+        <div class="mfield">Tipo<div class="minp">Automático</div></div>
+        <div class="mfield">Total a descargar (0 = todos)<div class="minp">50</div></div>
+        <div style="font-size:11.5px;margin:8px 0"><span style="color:#3b82f6">☑</span> Evitar pocas impresiones</div>
+        <div style="display:flex;gap:6px"><div class="mbtn" style="flex:2;background:#3b82f6;margin:0">▶ Iniciar</div><div class="mbtn" style="flex:1;background:#2b313b;margin:0">■ Detener</div></div>
+      </div>
+      <ul class="ex">
+        <li><b>Anuncios en esta búsqueda</b> — el total que Meta muestra para esa búsqueda.</li>
+        <li><b>Mín. anuncios que repiten</b> — con 2 o más baja solo los que la marca repite ("N anuncios usan este contenido", los que está escalando). Con 1 o 0 baja todos los anuncios de la búsqueda, se repitan o no.</li>
+        <li><b>Tipo</b> — Automático (video o imagen según el anuncio), Solo videos o Solo imágenes.</li>
+        <li><b>Total a descargar</b> — cuántos bajar. 0 = sin límite (scrollea hasta el final).</li>
+        <li><b>Evitar pocas impresiones</b> — saltea los marcados como "Número de impresiones bajo" (pruebas que no rindieron).</li>
+        <li><b>▶ Iniciar / ■ Detener</b> — arranca o corta la descarga.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="step"><h2>🏷️ Cómo se nombran los archivos</h2></div>
+    <div class="fname" style="font-size:13.5px;color:#7fd1a0;margin:0 0 12px">4_ads_27_6_26_lamarca_1652452402393518.mp4</div>
+    <ul class="ex">
+      <li><b>4_ads</b> — cuántos anuncios usan ese mismo contenido (cuánto lo está escalando la marca).</li>
+      <li><b>27_6_26</b> — la fecha (día_mes_año) desde que el anuncio está en circulación.</li>
+      <li><b>lamarca</b> — la marca (sale del término de búsqueda de la Ad Library).</li>
+      <li><b>1652452402393518</b> — el ID del anuncio en la biblioteca.</li>
+      <li><b>.mp4</b> — video (o <b>.jpg</b> si el anuncio es una imagen).</li>
+    </ul>
+  </div>
+
+  <div class="foot">Corre en tu navegador con datos públicos. Videos en streaming (raros) pueden bajar incompletos.</div>
+  <div class="foot" style="margin-top:4px;color:#7d8794">Proyecto open source · <a id="repoLink" href="https://github.com/vilaslautaro/ecom-toolkit" target="_blank" rel="noopener noreferrer" style="color:#8ec5ff;text-decoration:none">github.com/vilaslautaro/ecom-toolkit</a></div>
+</div>
+
+<!--{{BOOKMARKLET_CORE}}-->
+
+<!--{{PAGE_SCRIPT}}-->
+</body>
+</html>

@@ -1,0 +1,78 @@
+name: Feature request
+description: Propose new functionality or an improvement.
+title: '[feat]: '
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before writing any code, describe the idea here. Discussing it is faster than redoing an entire PR.
+
+        Check the "Project scope" section of the
+        [CONTRIBUTING.md](https://github.com/vilaslautaro/ecom-toolkit/blob/main/CONTRIBUTING.md) first.
+
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Before opening the issue
+      options:
+        - label: I searched the open and closed issues and did not find this proposal.
+          required: true
+        - label: I read the project scope and this proposal fits in it (no backend, no runtime dependencies, public data only).
+          required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Meta Ad Library
+        - Shopify store
+        - Page / bookmarklet generation
+        - Tests or tooling
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem it solves
+      description: Describe the concrete situation that is annoying or impossible today. Do not start from the solution.
+      placeholder: 'When I download from the Ad Library, I cannot ...'
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: What you would like the tool to do. If it affects the bookmarklet configuration, say which option you would add or change.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you considered
+      description: Other ways of solving it, or how you are working around it by hand today.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: implementation
+    attributes:
+      label: Implementation
+      options:
+        - label: I am willing to send the PR if the proposal is approved.
+          required: false
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Additional context
+      description: Screenshots, examples, links to stores or searches where the case shows up.
+    validations:
+      required: false

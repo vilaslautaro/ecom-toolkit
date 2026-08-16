@@ -36,6 +36,13 @@ describe('the fingerprint that lets a user verify what they copied', () => {
 
     expect(sha256Of(tampered)).not.toBe(readPublishedFingerprint());
   });
+
+  it('covers the bare url, so a file with a trailing newline hashes to something else', () => {
+    const url = buildBookmarkletUrl();
+
+    expect(sha256Of(url)).toBe(readPublishedFingerprint());
+    expect(sha256Of(`${url}\n`)).not.toBe(readPublishedFingerprint());
+  });
 });
 
 describe('the bookmarklet the page hands to the user', () => {

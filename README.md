@@ -78,10 +78,18 @@ A bookmarklet is a single unreadable URL. You cannot review 36,000 characters by
 Paste the bookmarklet into a file, then hash it:
 
 ```bash
-tr -d '\n' < bookmarklet.txt | sha256sum
+tr -d '\r\n' < bookmarklet.txt | sha256sum
 ```
 
-**Do not run `sha256sum bookmarklet.txt` directly.** Editors append a trailing newline, the fingerprint covers the URL alone, and the two digests share nothing — you would conclude you had been served different code when you had not. `tr` strips the newline back off.
+```powershell
+$sha = [Security.Cryptography.SHA256]::Create()
+$text = (Get-Content bookmarklet.txt -Raw).Trim()
+[BitConverter]::ToString($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes($text))).Replace('-','').ToLower()
+```
+
+**Do not run `sha256sum bookmarklet.txt` directly.** The fingerprint covers the URL alone, and your editor appended a trailing newline when it saved the file. The two digests share nothing, so you would conclude you had been served different code when you had not.
+
+Three ways a saved file drifts from the URL, all of them invisible: the trailing newline, the carriage return a Windows editor writes with it, and the byte-order mark some editors put at the front. The commands above survive all three — `tr -d '\r\n'` on the assumption your editor writes no BOM, the PowerShell one unconditionally, because it decodes the file before hashing.
 
 Cloning skips all of it. `npm run build:check` rebuilds `index.html` from `src/` and fails if either the committed page or the committed fingerprint disagrees, which is also what CI runs on every pull request. `npm run serve` then gives you the page with no hosting in the trust chain at all.
 

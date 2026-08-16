@@ -29,11 +29,16 @@ export function publishedDateOf(product: ShopifyProduct): Date | null {
   return Number.isNaN(date.getTime()) ? null : date;
 }
 
-function pickBestSellers(
+interface BestSellerSelection {
+  readonly products: readonly ShopifyProduct[];
+  readonly rankedCount: number;
+}
+
+function selectBestSellers(
   products: readonly ShopifyProduct[],
   bestSellingHandles: readonly string[],
   sellable: readonly ShopifyProduct[],
-): readonly ShopifyProduct[] {
+): BestSellerSelection {
   const byHandle = new Map(products.map((product) => [product.handle, product]));
 
   const ranked = bestSellingHandles
@@ -42,10 +47,16 @@ function pickBestSellers(
     .filter((product) => !isAddOnProduct(product))
     .slice(0, BEST_SELLER_COUNT);
 
-  if (ranked.length >= BEST_SELLER_COUNT) return ranked;
+  if (ranked.length >= BEST_SELLER_COUNT) {
+    return { products: ranked, rankedCount: ranked.length };
+  }
 
   const filler = sellable.filter((product) => !ranked.includes(product));
-  return [...ranked, ...filler].slice(0, BEST_SELLER_COUNT);
+
+  return {
+    products: [...ranked, ...filler].slice(0, BEST_SELLER_COUNT),
+    rankedCount: ranked.length,
+  };
 }
 
 function sellablePrices(products: readonly ShopifyProduct[]): readonly number[] {
@@ -96,9 +107,12 @@ export function buildStoreInsights(input: StoreInsightsInput): StoreInsights {
     .map(publishedDateOf)
     .filter((date): date is Date => date !== null);
 
+  const selection = selectBestSellers(input.products, input.bestSellingHandles, sellable);
+
   return {
     brand: input.brand,
-    bestSellers: pickBestSellers(input.products, input.bestSellingHandles, sellable),
+    bestSellers: selection.products,
+    rankedProductCount: selection.rankedCount,
     sellableProductCount: sellable.length,
     priceRange: priceRangeOf(sellable, input.currency),
     firstPublishedAt: earliestDate(publishedDates),

@@ -40,6 +40,7 @@ const AD_LIBRARY_LINK_STYLE =
   'display:block;text-align:center;margin-top:12px;background:#3b82f6;color:#fff;border-radius:9px;padding:11px;font-weight:700;text-decoration:none';
 const BRAND_STYLE = 'font-size:12px;color:#8ec5ff;margin-bottom:10px';
 const BEST_SELLERS_TITLE_STYLE = 'font-weight:700;margin-bottom:7px';
+const RANKING_NOTICE_STYLE = 'font-size:11px;color:#98a2b3;margin-bottom:8px';
 const BEST_SELLER_ROW_STYLE =
   'display:flex;gap:9px;align-items:center;margin-bottom:8px;text-decoration:none;color:#eef1f5';
 const BEST_SELLER_POSITION_STYLE = 'width:18px;color:#98a2b3;font-weight:700';
@@ -61,6 +62,11 @@ const IMAGES_BUTTON_LABEL = '🖼️ Descargar todas las imágenes';
 const VIDEOS_BUTTON_LABEL = '🎬 Descargar todos los videos';
 const AD_LIBRARY_LABEL = '🔎 Ver anuncios en la Ad Library';
 const BEST_SELLERS_TITLE = '🏆 Top 3 más vendidos';
+const CATALOGUE_PRODUCTS_TITLE = '📦 Productos de la tienda';
+const NO_RANKING_NOTICE = 'Esta tienda no expone su ranking de más vendidos.';
+const PARTIAL_RANKING_NOTICE_PREFIX = 'Solo los primeros ';
+const PARTIAL_RANKING_NOTICE_SUFFIX = ' salen del ranking real.';
+const NO_NOTICE = '';
 const PRODUCT_COUNT_LABEL = '📦 Productos: ';
 const PRICE_RANGE_LABEL = '💲 Precios: ';
 const PRICE_RANGE_SEPARATOR = ' – ';
@@ -121,7 +127,7 @@ function formatDate(date: Date | null): string {
 }
 
 function formatPrice(currency: string, amount: string): string {
-  return `${currency} ${amount}`;
+  return currency === '' ? amount : `${currency} ${amount}`;
 }
 
 function createDownloadButton(id: string, style: string, label: string): HTMLButtonElement {
@@ -227,6 +233,39 @@ function createStatsSection(insights: StoreInsights): HTMLDivElement {
   return stats;
 }
 
+interface BestSellersHeading {
+  readonly title: string;
+  readonly notice: string;
+}
+
+function headingFor(insights: StoreInsights): BestSellersHeading {
+  if (insights.rankedProductCount >= insights.bestSellers.length) {
+    return { title: BEST_SELLERS_TITLE, notice: NO_NOTICE };
+  }
+
+  if (insights.rankedProductCount === 0) {
+    return { title: CATALOGUE_PRODUCTS_TITLE, notice: NO_RANKING_NOTICE };
+  }
+
+  return {
+    title: BEST_SELLERS_TITLE,
+    notice:
+      PARTIAL_RANKING_NOTICE_PREFIX
+      + String(insights.rankedProductCount)
+      + PARTIAL_RANKING_NOTICE_SUFFIX,
+  };
+}
+
+function createBestSellersHeading(insights: StoreInsights): readonly Element[] {
+  if (insights.bestSellers.length === 0) return [];
+
+  const heading = headingFor(insights);
+  const title = createTextElement('div', BEST_SELLERS_TITLE_STYLE, heading.title);
+  if (heading.notice === NO_NOTICE) return [title];
+
+  return [title, createTextElement('div', RANKING_NOTICE_STYLE, heading.notice)];
+}
+
 function createInsightsSection(insights: StoreInsights, origin: string): readonly Element[] {
   const bestSellers = insights.bestSellers.map((product, index) =>
     createBestSellerRow(product, index + 1, origin, insights.priceRange.currency),
@@ -234,7 +273,7 @@ function createInsightsSection(insights: StoreInsights, origin: string): readonl
 
   return [
     createTextElement('div', BRAND_STYLE, insights.brand),
-    createTextElement('div', BEST_SELLERS_TITLE_STYLE, BEST_SELLERS_TITLE),
+    ...createBestSellersHeading(insights),
     ...bestSellers,
     createStatsSection(insights),
   ];

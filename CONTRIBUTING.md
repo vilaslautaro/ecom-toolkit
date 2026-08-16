@@ -67,9 +67,21 @@ Useful scripts:
 | `npm run test:watch` | Vitest in watch mode |
 | `npm run test:e2e` | e2e tests (Playwright) |
 | `npm run test:adlib` | Test against the **real** Ad Library, with `ADLIB_LIVE=1` and a visible browser |
+| `npm run test:visual` | Screenshot regression, in Docker (needs Docker running) |
+| `npm run test:visual:update` | Rewrites the screenshot baselines, in Docker |
 | `npm test` | Unit + integration + e2e |
 
 `test:adlib` hits Meta for real, so it is slow and brittle. It does not run in CI and you do not need it for an ordinary PR: use it only when you are touching Ad Library scraping.
+
+### The screenshot baselines are Linux, always
+
+`tests/visual/` compares the generator page and both injected panels against four committed PNGs. Screenshots do not survive a change of operating system: antialiasing, font hinting and emoji all differ, so a baseline taken on Windows or macOS fails on CI forever, and a suite that always fails is a suite everybody ignores.
+
+So the baselines are never taken on your machine. Both scripts run the suite inside `mcr.microsoft.com/playwright:v1.62.1-noble` — the image matching the Playwright version this repo pins — mount the repository at `/work` and install with `npm ci` in the container, leaving your own `node_modules` out of the mount because its native binaries are built for your OS. CI runs the visual job in that very same image.
+
+If your change moves pixels on purpose, run `npm run test:visual:update`, **look at the four PNGs in the diff**, and commit them with the change. If it moves pixels you did not intend, you just found a bug.
+
+Two things are deliberately neutralised so the baselines only fail for real reasons: the SHA-256 fingerprint at the foot of the page is masked, since it changes on every code change, and the dates in the store panel come from fixtures rendered in a fixed locale and timezone.
 
 ## Non-negotiable rules
 
@@ -115,6 +127,7 @@ Where each thing goes:
 | `tests/unit/` | one file per module in `src/`, imported directly |
 | `tests/integration/` | the generated `index.html` and the bookmarklet that comes out of it |
 | `tests/e2e/` | the page and the bookmarklet running in Chromium |
+| `tests/visual/` | screenshot baselines for the page and both panels, rendered in Docker |
 | `tests/support/` | fixtures and the jsdom harness |
 
 ## Branches

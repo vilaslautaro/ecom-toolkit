@@ -49,8 +49,27 @@ npm test
 | `npm run test:unit` | Vitest over jsdom: unit tests per module, plus integration tests over the generated `index.html` |
 | `npm run test:e2e` | Playwright: the generator page, and the bookmarklet running in Chromium against an intercepted Ad Library |
 | `npm run test:adlib` | Smoke test against the **real** Ad Library. Opt-in, excluded from CI |
+| `npm run test:visual` | Playwright screenshots: the generator page and both injected panels, compared against the committed baselines |
+| `npm run test:visual:update` | Regenerates those baselines |
 
 The e2e suite never touches Facebook: `page.route()` answers the Ad Library URL with a fixture, so the bookmarklet runs believing it is there. The only one that reaches the internet is `test:adlib`, which is off by default and exists for when Meta changes its DOM and you need to know whether the problem is ours or theirs.
+
+### Visual regression
+
+Four baselines live next to their specs in `tests/visual/`: the generator page at 1280x800 and at 375x812, the Ad Library panel, and the Shopify store panel. They are PNGs and they are committed.
+
+A screenshot only matches the machine that took it, so **the baselines are rendered on Linux, inside the official Playwright image, never on your own machine**. Both npm commands do that for you — they need Docker running, and nothing else:
+
+```bash
+npm run test:visual          # compare against the baselines
+npm run test:visual:update   # rewrite the baselines, then review the diff before committing
+```
+
+Both start `mcr.microsoft.com/playwright:v1.62.1-noble`, the image that matches the Playwright version in `package.json`, mount the repository at `/work` and install with `npm ci` inside the container. Your `node_modules` is deliberately left out of the mount: it holds native binaries built for your OS. CI runs the same suite in the same image, so a baseline that passes locally passes there.
+
+The suite has its own Playwright project, `visual`, kept out of `npx playwright test` so the e2e run stays fast. Set `VISUAL_SNAPSHOTS=1` if you want to reach it by hand.
+
+Screenshots go stale for real reasons and for silly ones. The silly ones are already handled: animations are off, the SHA-256 fingerprint at the foot of the page is masked because it changes with every code change, dates come from fixtures rendered in a fixed locale and timezone, and every capture waits for fonts and images. If a baseline changes after a UI change, that is the suite doing its job — regenerate it and look at the diff.
 
 ## Contributing
 

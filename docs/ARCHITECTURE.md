@@ -184,6 +184,30 @@ drifts into describing code that has since changed. Naming and small functions c
 test name carries the *why*. If something seems to need a comment, that is usually a badly named
 symbol or a function waiting to be extracted.
 
+## Why downloads are not restricted to an allowlist of hosts
+
+`fetchBlob` will fetch any URL the page hands it. Reviewers read that as a server-side request
+forgery shape and propose an allowlist of Shopify and Meta CDN hosts. It is the wrong fix twice
+over.
+
+It grants an attacker nothing. Those URLs come from `<img>` and `<video>` elements the page already
+made the browser request, and any page can reach any host from the visitor's address with a tag or a
+`fetch` call, bookmarklet or not. Ours are strictly weaker than the page's own requests, because they
+carry `credentials: 'omit'` and the page's do not. The shape resembles SSRF; the capability is not
+there.
+
+And it would break the feature. Storefronts serve their images from their own domain far more often
+than from a Shopify CDN, because that is what a custom domain on a CDN looks like:
+
+| Store | Large images on the page | Would survive a `cdn.shopify.com` allowlist |
+| --- | --- | --- |
+| allbirds.com | 39 | 0 |
+| deathwishcoffee.com | 80 | 2 |
+
+"Download every image" would quietly return almost nothing, and the person using it would have no
+way to tell a blocked host from a store with no images. Trading a working feature for a guarantee
+that was already there is a bad trade.
+
 ## Constraints that have already broken production
 
 Each of these cost real downtime or silent data loss. They are the reason the corresponding tests

@@ -129,6 +129,34 @@ describe('downloadPageImages', () => {
     expect(context.fileNames()).toEqual(['img_1_foto.jpg', 'img_2_foto.jpg']);
   });
 
+  it('saves nothing when the cdn answers with an error page instead of an image', async () => {
+    const context = openStorePage(
+      '<img src="https://cdn.shopify.com/expirada.jpg" data-natural-width="900">',
+      { default: { status: 403, contentType: 'text/html', byteSize: 512 } },
+    );
+
+    await downloadPageImages(context.report);
+
+    expect(context.environment.downloads).toHaveLength(0);
+    expect(context.lastStatus()).toContain('0 imágenes');
+  });
+
+  it('counts only what it actually saved when some urls have expired', async () => {
+    const context = openStorePage(
+      `<img src="https://cdn.shopify.com/viva.jpg" data-natural-width="900">
+       <img src="https://cdn.shopify.com/expirada.jpg" data-natural-width="900">`,
+      {
+        expirada: { status: 404, contentType: 'text/html', byteSize: 512 },
+        default: { byteSize: 1024, contentType: 'image/jpeg' },
+      },
+    );
+
+    await downloadPageImages(context.report);
+
+    expect(context.fileNames()).toEqual(['img_1_viva.jpg']);
+    expect(context.lastStatus()).toContain('1 imágenes');
+  });
+
   it('keeps going with the rest of the batch when one image fails', async () => {
     const context = openStorePage(
       `<img src="https://cdn.shopify.com/rota.jpg" data-natural-width="900">

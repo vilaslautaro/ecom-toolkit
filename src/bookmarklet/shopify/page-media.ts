@@ -10,6 +10,11 @@ const VIDEO_EXTENSIONS = /\.(mp4|webm|mov|m4v)$/i;
 const MP4_SOURCE = /mp4/i;
 const PROTOCOL_RELATIVE_PREFIX = '//';
 
+const UNSAFE_FILE_NAME_CHARACTERS = /[^a-zA-Z0-9._-]+/g;
+const REPEATED_SEPARATORS = /-{2,}/g;
+const SURROUNDING_SEPARATORS = /^[-.]+|[-.]+$/g;
+const MAX_FILE_NAME_LENGTH = 80;
+
 const ANONYMOUS_REQUEST: RequestInit = { credentials: 'omit' };
 
 interface ProductMediaSource {
@@ -128,9 +133,20 @@ function tallestMp4Source(media: ProductMedia): string {
   return tallest;
 }
 
+function sanitizeFileName(name: string): string {
+  return name
+    .replace(UNSAFE_FILE_NAME_CHARACTERS, '-')
+    .replace(REPEATED_SEPARATORS, '-')
+    .replace(SURROUNDING_SEPARATORS, '')
+    .slice(0, MAX_FILE_NAME_LENGTH);
+}
+
 function fileNameFor(url: string, index: number, kind: MediaKind): string {
   const lastSegment = url.split('/').pop() ?? '';
-  const name = (lastSegment || `${kind.namePrefix}${index}`).split('?')[0] ?? '';
+  const withoutQuery = lastSegment.split('?')[0] ?? '';
+  const sanitized = sanitizeFileName(withoutQuery);
+  const name = sanitized || `${kind.namePrefix}${index}`;
+
   return kind.knownExtensions.test(name) ? name : `${name}${kind.defaultExtension}`;
 }
 

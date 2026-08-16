@@ -36,6 +36,59 @@ function openStorePage(body: string, routes: StubbedRoutes, url = STORE_URL): Me
   };
 }
 
+describe('the file name taken from a media url', () => {
+  const RIGHT_TO_LEFT_OVERRIDE = String.fromCharCode(0x202e);
+
+  const IMAGE_ROUTES: StubbedRoutes = {
+    'products/remera.js': { status: 404 },
+    default: { byteSize: 2048, contentType: 'image/jpeg' },
+  };
+
+  async function saveImageNamed(urlPath: string): Promise<string> {
+    const context = openStorePage(
+      `<img src="https://cdn.shopify.com/${urlPath}" data-natural-width="1200">`,
+      IMAGE_ROUTES,
+    );
+    await downloadPageImages(context.report);
+
+    return context.fileNames()[0] ?? '';
+  }
+
+  it('keeps a readable name when the store names its file sensibly', async () => {
+    expect(await saveImageNamed('remera-azul_1024x.jpg')).toBe('img_1_remera-azul_1024x.jpg');
+  });
+
+  it('leaves a traversal attempt with no separator to traverse with', async () => {
+    const fileName = await saveImageNamed('a/..%2F..%2Fetc%2Fpasswd.jpg');
+
+    expect(fileName).toMatch(/^[a-zA-Z0-9._-]+$/);
+    expect(fileName).not.toContain('/');
+    expect(fileName).not.toContain('\\');
+    expect(fileName.startsWith('img_1_.')).toBe(false);
+  });
+
+  it('drops the characters that let a name disguise its own extension', async () => {
+    const fileName = await saveImageNamed(`factura${RIGHT_TO_LEFT_OVERRIDE}gpj.exe`);
+
+    expect(fileName).toMatch(/^[a-zA-Z0-9._-]+$/);
+    expect(fileName.endsWith('.jpg')).toBe(true);
+  });
+
+  it('forces a known extension onto a name that claims to be executable', async () => {
+    expect(await saveImageNamed('payload.exe')).toBe('img_1_payload.exe.jpg');
+  });
+
+  it('caps a name long enough to break a filesystem', async () => {
+    const fileName = await saveImageNamed(`${'a'.repeat(400)}.jpg`);
+
+    expect(fileName.length).toBeLessThan(120);
+  });
+
+  it('falls back to its own name when the url segment sanitizes away to nothing', async () => {
+    expect(await saveImageNamed('%%%')).toBe('img_1_img0.jpg');
+  });
+});
+
 describe('downloadPageImages', () => {
   it('saves the large images of the page and leaves icons and thumbnails out', async () => {
     const context = openStorePage(

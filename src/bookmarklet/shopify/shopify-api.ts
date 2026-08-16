@@ -69,7 +69,7 @@ function collectProductHandles(markup: string): readonly string[] {
   const handles: string[] = [];
 
   for (let match = pattern.exec(markup); match !== null; match = pattern.exec(markup)) {
-    const handle = match[1];
+    const handle = match[1]?.toLowerCase();
     if (handle && !handles.includes(handle)) handles.push(handle);
   }
 

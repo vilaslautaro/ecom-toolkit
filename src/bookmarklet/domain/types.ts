@@ -82,6 +82,7 @@ export interface PriceRange {
 export interface StoreInsights {
   readonly brand: string;
   readonly bestSellers: readonly ShopifyProduct[];
+  readonly rankedProductCount: number;
   readonly sellableProductCount: number;
   readonly priceRange: PriceRange;
   readonly firstPublishedAt: Date | null;

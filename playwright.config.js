@@ -2,6 +2,29 @@ import { defineConfig, devices } from '@playwright/test';
 
 const PORT = 4173;
 
+const VISUAL_PROJECT_IS_ENABLED = process.env.VISUAL_SNAPSHOTS === '1';
+
+const visualProject = {
+  name: 'visual',
+  testDir: './tests/visual',
+  use: {
+    ...devices['Desktop Chrome'],
+    deviceScaleFactor: 1,
+    colorScheme: 'light',
+    reducedMotion: 'reduce',
+    locale: 'es-AR',
+    timezoneId: 'UTC',
+  },
+  expect: {
+    toHaveScreenshot: {
+      animations: 'disabled',
+      caret: 'hide',
+      scale: 'css',
+      maxDiffPixelRatio: 0.01,
+    },
+  },
+};
+
 export default defineConfig({
   testDir: './tests/e2e',
   fullyParallel: true,
@@ -18,6 +41,7 @@ export default defineConfig({
 
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    ...(VISUAL_PROJECT_IS_ENABLED ? [visualProject] : []),
   ],
 
   webServer: {

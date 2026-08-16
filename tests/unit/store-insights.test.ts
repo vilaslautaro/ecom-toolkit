@@ -212,3 +212,50 @@ describe('buildStoreInsights', () => {
     expect(insightsFor([]).brand).toBe(BRAND);
   });
 });
+
+describe('buildStoreInsights telling a real ranking apart from the filler', () => {
+  it('counts every shown product as ranked when the storefront ranked all three', () => {
+    const insights = insightsFor(['tercero', 'estrella', 'segundo']);
+
+    expect(insights.rankedProductCount).toBe(insights.bestSellers.length);
+  });
+
+  it('counts nothing as ranked when the storefront exposes no ranking at all', () => {
+    const insights = insightsFor([]);
+
+    expect(insights.bestSellers).toHaveLength(3);
+    expect(insights.rankedProductCount).toBe(0);
+  });
+
+  it('counts only the ranked head when the rest of the top three is filler', () => {
+    const insights = insightsFor(['tercero']);
+
+    expect(insights.bestSellers).toHaveLength(3);
+    expect(insights.rankedProductCount).toBe(1);
+  });
+
+  it('counts as ranked neither an add on the storefront ranked nor the product replacing it', () => {
+    const insights = insightsFor(['seguro-de-envio', 'regalo']);
+
+    expect(insights.bestSellers).toHaveLength(3);
+    expect(insights.rankedProductCount).toBe(0);
+  });
+
+  it('counts as ranked only the handles this store actually sells', () => {
+    const insights = insightsFor(['handle-de-otra-tienda', 'estrella', 'segundo']);
+
+    expect(insights.rankedProductCount).toBe(2);
+  });
+
+  it('reports a whole ranking when the catalogue is too small to show three products', () => {
+    const insights = buildStoreInsights({
+      brand: BRAND,
+      currency: CURRENCY,
+      products: [...REAL_PRODUCTS].slice(0, 2),
+      bestSellingHandles: ['segundo', 'estrella'],
+    });
+
+    expect(insights.bestSellers).toHaveLength(2);
+    expect(insights.rankedProductCount).toBe(2);
+  });
+});

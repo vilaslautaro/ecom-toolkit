@@ -33,7 +33,12 @@ npm run test:unit    # fast, no browser
 npm run typecheck
 npm run build
 npm run serve
+npm run test:visual  # screenshot regression, in Docker
 ```
+
+The screenshot baselines in `tests/visual/` are Linux PNGs, rendered inside the official Playwright
+image so they match CI. Never regenerate them outside Docker: `npm run test:visual:update` is the
+only way, and the four PNGs it rewrites are reviewed and committed with the change.
 
 `npm run test:adlib` hits the real Ad Library. It is opt-in, excluded from CI, and only useful for
 diagnosing whether Meta changed its DOM.

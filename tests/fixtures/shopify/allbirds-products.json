@@ -1,0 +1,776 @@
+{
+  "products": [
+    {
+      "created_at": "2025-07-23T14:43:12-07:00",
+      "handle": "mens-strider-medium-grey",
+      "id": 7199699927120,
+      "images": [
+        {
+          "src": "https://cdn.shopify.com/s/files/1/1104/4168/files/A11729_25Q3_Strider-Medium-Grey-Blizzard-Sole_PDP_LEFT.png?v=1754951480"
+        }
+      ],
+      "published_at": "2026-08-11T15:42:35-07:00",
+      "title": "Men's Strider - Medium Grey (Blizzard Sole)",
+      "variants": [
+        {
+          "id": 41243839496272,
+          "price": "91.00"
+        },
+        {
+          "id": 41243839529040,
+          "price": "91.00"
+        },
+        {
+          "id": 41243839561808,
+          "price": "91.00"
+        },
+        {
+          "id": 41243839594576,
+          "price": "91.00"
+        },
+        {
+          "id": 41243839627344,
+          "price": "91.00"
+        },
+        {
+          "id": 41243839660112,
+          "price": "91.00"
+        },
+        {
+          "id": 41243839692880,
+          "price": "91.00"
+        },
+        {
+          "id": 41243839725648,
+          "price": "91.00"
+        },
+        {
+          "id": 41243839758416,
+          "price": "91.00"
+        },
+        {
+          "id": 41243839791184,
+          "price": "91.00"
+        },
+        {
+          "id": 41243839823952,
+          "price": "91.00"
+        },
+        {
+          "id": 41243839856720,
+          "price": "91.00"
+        },
+        {
+          "id": 41243839889488,
+          "price": "91.00"
+        }
+      ]
+    },
+    {
+      "created_at": "2022-02-03T10:34:21-08:00",
+      "handle": "mens-tree-dashers",
+      "id": 6643980468304,
+      "images": [
+        {
+          "src": "https://cdn.shopify.com/s/files/1/1104/4168/files/AA000YM_SHOE_LEFT_GLOBAL_MENS_TREE_DASHER_2.0_Natural_Black_Blizzard_48bbccd1-a0ef-475d-a3c1-af945ece7fbc.png?v=1751061059"
+        }
+      ],
+      "published_at": "2026-08-11T15:42:25-07:00",
+      "title": "Men's Tree Dasher 2 - Natural Black (Blizzard Sole)",
+      "variants": [
+        {
+          "id": 39656140243024,
+          "price": "99.00"
+        },
+        {
+          "id": 39656140275792,
+          "price": "99.00"
+        },
+        {
+          "id": 39656140308560,
+          "price": "99.00"
+        },
+        {
+          "id": 39656140341328,
+          "price": "99.00"
+        },
+        {
+          "id": 39656140374096,
+          "price": "99.00"
+        },
+        {
+          "id": 39656140406864,
+          "price": "99.00"
+        },
+        {
+          "id": 39656140439632,
+          "price": "99.00"
+        },
+        {
+          "id": 39656140472400,
+          "price": "99.00"
+        },
+        {
+          "id": 39656140505168,
+          "price": "99.00"
+        },
+        {
+          "id": 39656140537936,
+          "price": "99.00"
+        },
+        {
+          "id": 39656140570704,
+          "price": "99.00"
+        },
+        {
+          "id": 39656140603472,
+          "price": "99.00"
+        },
+        {
+          "id": 39656140636240,
+          "price": "99.00"
+        }
+      ]
+    },
+    {
+      "created_at": "2026-02-04T17:38:18-08:00",
+      "handle": "mens-cruiser-shadow-blue-natural-white-sole",
+      "id": 7292464955472,
+      "images": [
+        {
+          "src": "https://cdn.shopify.com/s/files/1/1104/4168/files/All-birds_0010.png?v=1783535519"
+        }
+      ],
+      "published_at": "2026-07-08T11:32:23-07:00",
+      "title": "Men's Cruiser - Shadow Blue (Natural White Sole)",
+      "variants": [
+        {
+          "id": 41990816759888,
+          "price": "105.00"
+        },
+        {
+          "id": 41990816792656,
+          "price": "105.00"
+        },
+        {
+          "id": 41990816825424,
+          "price": "105.00"
+        },
+        {
+          "id": 41990816858192,
+          "price": "105.00"
+        },
+        {
+          "id": 41990816890960,
+          "price": "105.00"
+        },
+        {
+          "id": 41990816923728,
+          "price": "105.00"
+        },
+        {
+          "id": 41990816956496,
+          "price": "105.00"
+        },
+        {
+          "id": 41990816989264,
+          "price": "105.00"
+        },
+        {
+          "id": 41990817022032,
+          "price": "105.00"
+        },
+        {
+          "id": 41990817054800,
+          "price": "105.00"
+        },
+        {
+          "id": 41990817087568,
+          "price": "105.00"
+        },
+        {
+          "id": 41990817120336,
+          "price": "105.00"
+        },
+        {
+          "id": 41990817153104,
+          "price": "105.00"
+        }
+      ]
+    },
+    {
+      "created_at": "2025-08-30T02:29:20-07:00",
+      "handle": "womens-cruiser-slip-on-canvas-sea-spray-natural-white-sole",
+      "id": 7215691300944,
+      "images": [
+        {
+          "src": "https://cdn.shopify.com/s/files/1/1104/4168/files/All-birds_0005_c3386c3f-064e-43f2-9d46-66377d0ebd10.png?v=1783537948"
+        }
+      ],
+      "published_at": "2026-07-08T11:32:06-07:00",
+      "title": "Women's Cruiser Slip On Canvas - Sea Spray (Natural White Sole)",
+      "variants": [
+        {
+          "id": 41315822796880,
+          "price": "100.00"
+        },
+        {
+          "id": 41315822829648,
+          "price": "100.00"
+        },
+        {
+          "id": 41315822862416,
+          "price": "100.00"
+        },
+        {
+          "id": 41315822895184,
+          "price": "100.00"
+        },
+        {
+          "id": 41315822927952,
+          "price": "100.00"
+        },
+        {
+          "id": 41315822960720,
+          "price": "100.00"
+        },
+        {
+          "id": 41315822993488,
+          "price": "100.00"
+        },
+        {
+          "id": 41315823026256,
+          "price": "100.00"
+        },
+        {
+          "id": 41315823059024,
+          "price": "100.00"
+        },
+        {
+          "id": 41315823091792,
+          "price": "100.00"
+        },
+        {
+          "id": 41315823124560,
+          "price": "100.00"
+        },
+        {
+          "id": 41315823157328,
+          "price": "100.00"
+        },
+        {
+          "id": 41315823190096,
+          "price": "100.00"
+        }
+      ]
+    },
+    {
+      "created_at": "2025-08-06T16:52:33-07:00",
+      "handle": "mens-cruiser-terralux-anthracite",
+      "id": 7205181653072,
+      "images": [
+        {
+          "src": "https://cdn.shopify.com/s/files/1/1104/4168/files/A12400_26Q1_Cruiser-Terralux-Anthracite-Dark-Gum-Sole_PDP_LEFT.png?v=1768947640"
+        }
+      ],
+      "published_at": "2026-06-30T18:04:23-07:00",
+      "title": "Men's Cruiser Terralux - Anthracite (Dark Gum Sole)",
+      "variants": [
+        {
+          "id": 41271112466512,
+          "price": "135.00"
+        },
+        {
+          "id": 41271112499280,
+          "price": "135.00"
+        },
+        {
+          "id": 41271112532048,
+          "price": "135.00"
+        },
+        {
+          "id": 41271112564816,
+          "price": "135.00"
+        },
+        {
+          "id": 41271112597584,
+          "price": "135.00"
+        },
+        {
+          "id": 41271112630352,
+          "price": "135.00"
+        },
+        {
+          "id": 41271112663120,
+          "price": "135.00"
+        },
+        {
+          "id": 41271112695888,
+          "price": "135.00"
+        },
+        {
+          "id": 41271112728656,
+          "price": "135.00"
+        },
+        {
+          "id": 41271112761424,
+          "price": "135.00"
+        },
+        {
+          "id": 41271112794192,
+          "price": "135.00"
+        },
+        {
+          "id": 41271112859728,
+          "price": "135.00"
+        }
+      ]
+    },
+    {
+      "created_at": "2025-08-26T17:33:15-07:00",
+      "handle": "womens-wool-runner-nz-mid-waterproof",
+      "id": 7214904279120,
+      "images": [
+        {
+          "src": "https://cdn.shopify.com/s/files/1/1104/4168/files/A12023_25Q3_Wool-Runner-NZ-Mid-Waterproof-Natural-Black-Natural-White-Sole_PDP_LEFT_15a18748-ff33-4e50-8755-fbf0158abcdd.png?v=1757724073"
+        }
+      ],
+      "published_at": "2026-06-30T18:03:14-07:00",
+      "title": "Women's Wool Runner NZ Mid Waterproof - Natural Black (Natural White Sole)",
+      "variants": [
+        {
+          "id": 41313654669392,
+          "price": "160.00"
+        },
+        {
+          "id": 41313654702160,
+          "price": "160.00"
+        },
+        {
+          "id": 41313654734928,
+          "price": "160.00"
+        },
+        {
+          "id": 41313654767696,
+          "price": "160.00"
+        },
+        {
+          "id": 41313654800464,
+          "price": "160.00"
+        },
+        {
+          "id": 41313654833232,
+          "price": "160.00"
+        },
+        {
+          "id": 41313654866000,
+          "price": "160.00"
+        },
+        {
+          "id": 41313654898768,
+          "price": "160.00"
+        },
+        {
+          "id": 41313654931536,
+          "price": "160.00"
+        },
+        {
+          "id": 41313654964304,
+          "price": "160.00"
+        },
+        {
+          "id": 41313654997072,
+          "price": "160.00"
+        },
+        {
+          "id": 41313655029840,
+          "price": "160.00"
+        },
+        {
+          "id": 41313655062608,
+          "price": "160.00"
+        }
+      ]
+    },
+    {
+      "created_at": "2022-07-15T16:09:14-07:00",
+      "handle": "womens-wool-runner-up-mizzles-hazy-indigo",
+      "id": 6712397496400,
+      "images": [
+        {
+          "src": "https://cdn.shopify.com/s/files/1/1104/4168/files/AB0074M_SHOE_LEFT_GLOBAL_MENS_WOOL_RUNNER-UP_MIZZLE2_HAZY_INDIGO_RUGGED_KHAKI_9542e175-df7f-4dca-9092-29289041b8cc.png?v=1781829612"
+        }
+      ],
+      "published_at": "2026-06-18T17:41:16-07:00",
+      "title": "Women's Wool Runner-up Mizzle - Hazy Indigo (Hazy Indigo Sole)",
+      "variants": [
+        {
+          "id": 39812334518352,
+          "price": "60.00"
+        },
+        {
+          "id": 39812334551120,
+          "price": "60.00"
+        },
+        {
+          "id": 39812334583888,
+          "price": "60.00"
+        },
+        {
+          "id": 39812334616656,
+          "price": "60.00"
+        },
+        {
+          "id": 39812334649424,
+          "price": "60.00"
+        },
+        {
+          "id": 39812334682192,
+          "price": "60.00"
+        },
+        {
+          "id": 39812334714960,
+          "price": "60.00"
+        }
+      ]
+    },
+    {
+      "created_at": "2025-06-20T10:54:34-07:00",
+      "handle": "mens-tree-runner-nz-medium-grey",
+      "id": 7188363575376,
+      "images": [
+        {
+          "src": "https://cdn.shopify.com/s/files/1/1104/4168/files/A11959_25Q3_Tree_Runner_NZ_Medium_Grey_Blizzard_Sole_PDP_LEFT-2000x2000.png?v=1751898984"
+        }
+      ],
+      "published_at": "2026-06-11T13:26:34-07:00",
+      "title": "Men's Tree Runner NZ - Medium Grey (Blizzard Sole)",
+      "variants": [
+        {
+          "id": 41206419095632,
+          "price": "100.00"
+        },
+        {
+          "id": 41206419128400,
+          "price": "100.00"
+        },
+        {
+          "id": 41206419161168,
+          "price": "100.00"
+        },
+        {
+          "id": 41206419193936,
+          "price": "100.00"
+        },
+        {
+          "id": 41206419226704,
+          "price": "100.00"
+        },
+        {
+          "id": 41206419259472,
+          "price": "100.00"
+        },
+        {
+          "id": 41206419292240,
+          "price": "100.00"
+        },
+        {
+          "id": 41206419325008,
+          "price": "100.00"
+        },
+        {
+          "id": 41206419357776,
+          "price": "100.00"
+        },
+        {
+          "id": 41206419390544,
+          "price": "100.00"
+        },
+        {
+          "id": 41206419423312,
+          "price": "100.00"
+        },
+        {
+          "id": 41206419456080,
+          "price": "100.00"
+        },
+        {
+          "id": 41206419488848,
+          "price": "100.00"
+        },
+        {
+          "id": 41206419521616,
+          "price": "100.00"
+        }
+      ]
+    },
+    {
+      "created_at": "2025-08-29T10:53:09-07:00",
+      "handle": "womens-cruiser-canvas-port",
+      "id": 7215610724432,
+      "images": [
+        {
+          "src": "https://cdn.shopify.com/s/files/1/1104/4168/files/A12848_26Q1_Cruiser-Canvas-Port-Natural-White-Sole_PDP_LEFT_f544c3ab-bb93-4f19-9cb0-558975e64068.png?v=1774478056"
+        }
+      ],
+      "published_at": "2026-06-11T12:32:17-07:00",
+      "title": "Women's Canvas Cruiser - Port (Natural White Sole)",
+      "variants": [
+        {
+          "id": 41315547840592,
+          "price": "75.00"
+        },
+        {
+          "id": 41315547873360,
+          "price": "75.00"
+        },
+        {
+          "id": 41315547906128,
+          "price": "75.00"
+        },
+        {
+          "id": 41315547938896,
+          "price": "75.00"
+        },
+        {
+          "id": 41315547971664,
+          "price": "75.00"
+        },
+        {
+          "id": 41315548004432,
+          "price": "75.00"
+        },
+        {
+          "id": 41315548037200,
+          "price": "75.00"
+        },
+        {
+          "id": 41315548069968,
+          "price": "75.00"
+        },
+        {
+          "id": 41315548102736,
+          "price": "75.00"
+        },
+        {
+          "id": 41315548135504,
+          "price": "75.00"
+        },
+        {
+          "id": 41315548168272,
+          "price": "75.00"
+        },
+        {
+          "id": 41315548201040,
+          "price": "75.00"
+        },
+        {
+          "id": 41315548233808,
+          "price": "75.00"
+        }
+      ]
+    },
+    {
+      "created_at": "2025-08-06T22:51:21-07:00",
+      "handle": "mens-runner-nz-slip-on-mushroom",
+      "id": 7205207343184,
+      "images": [
+        {
+          "src": "https://cdn.shopify.com/s/files/1/1104/4168/files/A12622_26Q1_Runner-NZ-Slip-On-Mushroom-Mushroom_PDP_LEFT.png?v=1768951251"
+        }
+      ],
+      "published_at": "2026-06-11T12:32:12-07:00",
+      "title": "Men's Runner NZ Slip On - Mushroom (Mushroom Sole)",
+      "variants": [
+        {
+          "id": 41271264378960,
+          "price": "105.00"
+        },
+        {
+          "id": 41271264411728,
+          "price": "105.00"
+        },
+        {
+          "id": 41271264444496,
+          "price": "105.00"
+        },
+        {
+          "id": 41271264477264,
+          "price": "105.00"
+        },
+        {
+          "id": 41271264510032,
+          "price": "105.00"
+        },
+        {
+          "id": 41271264542800,
+          "price": "105.00"
+        },
+        {
+          "id": 41271264575568,
+          "price": "105.00"
+        },
+        {
+          "id": 41271264608336,
+          "price": "105.00"
+        },
+        {
+          "id": 41271264641104,
+          "price": "105.00"
+        },
+        {
+          "id": 41271264673872,
+          "price": "105.00"
+        },
+        {
+          "id": 41271264706640,
+          "price": "105.00"
+        },
+        {
+          "id": 41271264739408,
+          "price": "105.00"
+        },
+        {
+          "id": 41271264772176,
+          "price": "105.00"
+        }
+      ]
+    },
+    {
+      "created_at": "2025-07-03T09:09:12-07:00",
+      "handle": "mens-cruiser-medium-grey",
+      "id": 7193758466128,
+      "images": [
+        {
+          "src": "https://cdn.shopify.com/s/files/1/1104/4168/files/A11559_25Q3_Cruiser_Dark_Navy_Blizzard_PDP_LEFT-2000x2000_9f5ba943-6b25-4f75-9c74-edd67a6a0aa7.png?v=1751900449"
+        }
+      ],
+      "published_at": "2026-06-11T12:31:54-07:00",
+      "title": "Men's Cruiser - Medium Grey (Blizzard Sole)",
+      "variants": [
+        {
+          "id": 41222385270864,
+          "price": "105.00"
+        },
+        {
+          "id": 41222385303632,
+          "price": "105.00"
+        },
+        {
+          "id": 41222385336400,
+          "price": "105.00"
+        },
+        {
+          "id": 41222385369168,
+          "price": "105.00"
+        },
+        {
+          "id": 41222385401936,
+          "price": "105.00"
+        },
+        {
+          "id": 41222385434704,
+          "price": "105.00"
+        },
+        {
+          "id": 41222385467472,
+          "price": "105.00"
+        },
+        {
+          "id": 41222385500240,
+          "price": "105.00"
+        },
+        {
+          "id": 41222385533008,
+          "price": "105.00"
+        },
+        {
+          "id": 41222385565776,
+          "price": "105.00"
+        },
+        {
+          "id": 41222385598544,
+          "price": "105.00"
+        },
+        {
+          "id": 41222385631312,
+          "price": "105.00"
+        },
+        {
+          "id": 41222385664080,
+          "price": "105.00"
+        },
+        {
+          "id": 41222385696848,
+          "price": "105.00"
+        }
+      ]
+    },
+    {
+      "created_at": "2025-06-20T11:03:09-07:00",
+      "handle": "womens-tree-runner-nz-medium-grey",
+      "id": 7188364460112,
+      "images": [
+        {
+          "src": "https://cdn.shopify.com/s/files/1/1104/4168/files/A11959_25Q3_Tree_Runner_NZ_Medium_Grey_Blizzard_Sole_PDP_LEFT-2000x2000_f6ff6164-62df-42dc-89a8-fabcb3b5d438.png?v=1751899014"
+        }
+      ],
+      "published_at": "2026-06-11T12:31:53-07:00",
+      "title": "Women's Tree Runner NZ - Medium Grey (Blizzard Sole)",
+      "variants": [
+        {
+          "id": 41206426206288,
+          "price": "100.00"
+        },
+        {
+          "id": 41206426239056,
+          "price": "100.00"
+        },
+        {
+          "id": 41206426271824,
+          "price": "100.00"
+        },
+        {
+          "id": 41206426304592,
+          "price": "100.00"
+        },
+        {
+          "id": 41206426337360,
+          "price": "100.00"
+        },
+        {
+          "id": 41206426370128,
+          "price": "100.00"
+        },
+        {
+          "id": 41206426402896,
+          "price": "100.00"
+        },
+        {
+          "id": 41206426435664,
+          "price": "100.00"
+        },
+        {
+          "id": 41206426468432,
+          "price": "100.00"
+        },
+        {
+          "id": 41206426501200,
+          "price": "100.00"
+        },
+        {
+          "id": 41206426533968,
+          "price": "100.00"
+        },
+        {
+          "id": 41206426566736,
+          "price": "100.00"
+        },
+        {
+          "id": 41206426599504,
+          "price": "100.00"
+        }
+      ]
+    }
+  ]
+}

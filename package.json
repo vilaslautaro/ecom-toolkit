@@ -16,12 +16,15 @@
   "scripts": {
     "build": "tsx scripts/build.ts",
     "build:check": "tsx scripts/build.ts --check",
+    "fixtures:refresh": "tsx scripts/capture-fixtures.ts",
     "typecheck": "tsc --noEmit",
     "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "test:adlib": "ADLIB_LIVE=1 playwright test tests/e2e/ad-library.spec.ts --headed",
+    "test:visual": "tsx scripts/visual-tests.ts",
+    "test:visual:update": "tsx scripts/visual-tests.ts --update-snapshots",
     "serve": "tsx scripts/serve.ts"
   },
   "devDependencies": {

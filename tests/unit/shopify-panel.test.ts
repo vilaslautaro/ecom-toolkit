@@ -89,6 +89,33 @@ async function renderPanel(bestSelling?: readonly string[]) {
   return { environment, panel, text: panel.textContent ?? '' };
 }
 
+function openStoreWithoutPublishedCurrency(): PageEnvironment {
+  return createPageEnvironment({
+    url: STORE_URL,
+    html: `<!doctype html><html><body>${SHOPIFY_SCRIPT}</body></html>`,
+  });
+}
+
+async function renderPanelWithoutPublishedCurrency() {
+  const environment = openStoreWithoutPublishedCurrency();
+  environment.stubFetch(storeRoutes());
+  await buildStorePanel();
+
+  return environment.requireElement(PANEL_SELECTOR);
+}
+
+function elementTexts(panel: Element): readonly string[] {
+  return [...panel.querySelectorAll('*')].map((element) => element.textContent ?? '');
+}
+
+function elementWithExactText(panel: Element, text: string): HTMLElement | null {
+  return (
+    [...panel.querySelectorAll<HTMLElement>('*')].find(
+      (element) => element.textContent === text,
+    ) ?? null
+  );
+}
+
 describe('buildStorePanel on a Shopify store', () => {
   it('lists the three best sellers in the order the storefront ranks them', async () => {
     const { panel } = await renderPanel();
@@ -232,6 +259,95 @@ describe('buildStorePanel on a Shopify store', () => {
     expect(environment.downloads.map((download) => download.fileName)).toEqual([
       'img_1_foto.jpg',
     ]);
+  });
+});
+
+describe('buildStorePanel telling the reader how much of the top three is a real ranking', () => {
+  const RANKED_TITLE = '🏆 Top 3 más vendidos';
+  const CATALOGUE_TITLE = '📦 Productos de la tienda';
+  const NO_RANKING_NOTICE = 'Esta tienda no expone su ranking de más vendidos.';
+  const SECONDARY_TEXT_SELECTOR = '#mald-imgstat';
+
+  it('promises a ranking with no caveat when every row comes from the storefront ranking', async () => {
+    const { panel } = await renderPanel();
+
+    expect(elementTexts(panel)).toContain(RANKED_TITLE);
+    expect(panel.textContent).not.toContain(CATALOGUE_TITLE);
+    expect(panel.textContent).not.toContain('ranking');
+  });
+
+  it('stops calling it a ranking when the storefront exposed none and every row is filler', async () => {
+    const { panel } = await renderPanel([]);
+
+    expect(elementTexts(panel)).toContain(CATALOGUE_TITLE);
+    expect(elementTexts(panel)).toContain(NO_RANKING_NOTICE);
+    expect(panel.textContent).not.toContain(RANKED_TITLE);
+  });
+
+  it('says how many rows are real when only the first one came from the ranking', async () => {
+    const { panel } = await renderPanel(['estrella']);
+
+    expect(elementTexts(panel)).toContain(RANKED_TITLE);
+    expect(elementTexts(panel)).toContain('Solo los primeros 1 salen del ranking real.');
+  });
+
+  it('says how many rows are real when the ranking ran out after the second one', async () => {
+    const { panel } = await renderPanel(['estrella', 'segundo']);
+
+    expect(elementTexts(panel)).toContain(RANKED_TITLE);
+    expect(elementTexts(panel)).toContain('Solo los primeros 2 salen del ranking real.');
+  });
+
+  it('writes the caveat in the muted tone the panel keeps for secondary text', async () => {
+    const { environment, panel } = await renderPanel([]);
+
+    const notice = elementWithExactText(panel, NO_RANKING_NOTICE);
+    const secondaryText = environment.document.querySelector<HTMLElement>(
+      SECONDARY_TEXT_SELECTOR,
+    );
+
+    expect(notice).not.toBeNull();
+    expect(secondaryText).not.toBeNull();
+    expect(notice?.style.color).toBe(secondaryText?.style.color);
+  });
+
+  it('heads nothing when the catalogue leaves no product to show at all', async () => {
+    const panel = await renderCatalogue(
+      [shopifyProduct({ id: 5, title: 'Seguro de envio', handle: 'seguro-de-envio', price: '500.00' })],
+      [],
+    );
+
+    expect(panel.querySelectorAll(PRODUCT_LINK_SELECTOR)).toHaveLength(0);
+    expect(panel.textContent).not.toContain(RANKED_TITLE);
+    expect(panel.textContent).not.toContain(CATALOGUE_TITLE);
+    expect(panel.textContent).not.toContain('ranking');
+  });
+});
+
+describe('buildStorePanel pricing a store that publishes no currency', () => {
+  const AVERAGE_PRICE = '120366.25';
+  const HIGHEST_PRICE = '214999.99';
+  const PRICE_RANGE = '15225.00 – 214999.99';
+
+  it('writes the currency before the amount when the store publishes one', async () => {
+    const { panel } = await renderPanel();
+
+    const texts = elementTexts(panel);
+
+    expect(texts).toContain(`ARS ${HIGHEST_PRICE}`);
+    expect(texts).toContain(`ARS ${PRICE_RANGE}`);
+    expect(texts).toContain(`(prom ARS ${AVERAGE_PRICE})`);
+  });
+
+  it('leaves no gap where the currency would go when the store publishes none', async () => {
+    const panel = await renderPanelWithoutPublishedCurrency();
+
+    const texts = elementTexts(panel);
+
+    expect(texts).toContain(HIGHEST_PRICE);
+    expect(texts).toContain(PRICE_RANGE);
+    expect(texts).toContain(`(prom ${AVERAGE_PRICE})`);
+    expect(panel.textContent).not.toContain(`prom  ${AVERAGE_PRICE}`);
   });
 });
 

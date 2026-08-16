@@ -193,3 +193,32 @@ describe('fetchBestSellingHandles', () => {
     expect(await fetchBestSellingHandles(STORE_ORIGIN, isKnownHandle)).toEqual([]);
   });
 });
+
+describe('fetchBestSellingHandles on a theme that links products in uppercase', () => {
+  const hiutHandles = new Set(['wallet', 'hiutgiftbook', 'yb6']);
+  const isHiutHandle = (handle: string): boolean => hiutHandles.has(handle);
+
+  it('lowercases the handles so a link like hiutdenim /products/WALLET still finds its product', async () => {
+    const environment = openStore();
+    environment.stubFetch({
+      'collections/all': { text: storefrontMarkupFor(['WALLET', 'HiutGiftBook', 'YB6']) },
+    });
+
+    expect(await fetchBestSellingHandles(STORE_ORIGIN, isHiutHandle)).toEqual([
+      'wallet',
+      'hiutgiftbook',
+      'yb6',
+    ]);
+  });
+
+  it('ranks a product once even when the theme links it in two different capitalisations', async () => {
+    const environment = openStore();
+    environment.stubFetch({
+      'collections/all': {
+        text: storefrontMarkupFor(['WALLET', 'wallet', 'Wallet', 'YB6', 'yb6']),
+      },
+    });
+
+    expect(await fetchBestSellingHandles(STORE_ORIGIN, isHiutHandle)).toEqual(['wallet', 'yb6']);
+  });
+});

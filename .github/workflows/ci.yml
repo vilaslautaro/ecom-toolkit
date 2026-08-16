@@ -63,3 +63,36 @@ jobs:
             test-results/
           retention-days: 7
           if-no-files-found: ignore
+
+  visual:
+    name: Visual regression
+    runs-on: ubuntu-latest
+
+    # The baselines are pixels, so they only match inside the very image they were
+    # generated in: `npm run test:visual:update` renders them in this same container.
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+      options: --ipc=host
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Visual regression tests
+        run: npx playwright test --project=visual
+        env:
+          VISUAL_SNAPSHOTS: '1'
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-visual
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+          if-no-files-found: ignore

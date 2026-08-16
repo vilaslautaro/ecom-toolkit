@@ -159,6 +159,7 @@ function delay(milliseconds: number): Promise<void> {
 async function fetchBlobOrNull(url: string): Promise<Blob | null> {
   try {
     const response = await fetch(url, ANONYMOUS_REQUEST);
+    if (!response.ok) return null;
     return await response.blob();
   } catch {
     return null;

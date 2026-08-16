@@ -118,16 +118,26 @@ The URL is assembled in exactly one place, `src/page/bookmarklet-url.ts`, import
 build and the tests. A second implementation would be a second thing to drift, and the fingerprint
 would then be attesting to something nobody actually ships.
 
-The digest covers the URL and nothing else, which makes the obvious verification command wrong:
+The digest covers the URL and nothing else, and everything between the page and a saved file adds
+something to it. Each of these produces a completely different 64-character digest, and every one of
+them reads exactly like evidence of tampering:
 
-```bash
-tr -d '\n' < bookmarklet.txt | sha256sum   # correct
-sha256sum bookmarklet.txt                  # includes the newline your editor added
-```
+| What the file holds | Result |
+| --- | --- |
+| the URL alone | matches |
+| the URL and a trailing `\n` | fails |
+| the URL and a trailing `\r\n`, from a Windows editor | fails |
+| a byte-order mark, then the URL | fails |
 
-Both digests are 64 hex characters and they share nothing, so the second one reads exactly like
-evidence of tampering. A verification step that fails for honest users is worse than none, so the
-README documents the working command rather than leaving people to guess it.
+So the README documents commands that survive all three rather than one that only works on the
+maintainer's own machine. `tr -d '\r\n'` covers the newline endings; the PowerShell form covers the
+BOM as well, because it decodes the file before hashing instead of feeding raw bytes to a filter.
+
+This matters more than it looks. A verification step that fails for honest users is worse than no
+verification step: it manufactures false alarms, and the people who hit one conclude either that the
+project is compromised or that the check is noise. Both conclusions cost more than the check is
+worth. The first version of this documentation stripped `\n` only, which is correct on Linux and
+macOS and wrong on the platform this project is developed on.
 
 Two limits are worth stating plainly, because a fingerprint invites more confidence than it earns.
 It proves that what a user copied matches what this repository publishes; it proves nothing about

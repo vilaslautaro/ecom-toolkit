@@ -16,6 +16,7 @@
   "scripts": {
     "build": "tsx scripts/build.ts",
     "build:check": "tsx scripts/build.ts --check",
+    "fixtures:refresh": "tsx scripts/capture-fixtures.ts",
     "typecheck": "tsc --noEmit",
     "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "vitest run",

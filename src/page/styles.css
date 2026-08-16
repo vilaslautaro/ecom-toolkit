@@ -46,6 +46,9 @@
   .kbd{background:#0b0e12;border:1px solid var(--line);border-radius:5px;padding:1px 5px;font:11px ui-monospace,monospace}
   .out{background:#0b0e12;border:1px solid var(--line);border-radius:8px;padding:9px;font:10.5px/1.4 ui-monospace,monospace;color:#aeb9c9;max-height:64px;overflow:auto;word-break:break-all;margin-top:9px;display:none}
   details{margin-top:10px}
+  .fp{text-align:center;margin-top:18px;font-size:10px;color:#5c646f;line-height:1.7}
+  .fp a{color:#5c646f;text-decoration:underline}
+  .fp code{font:9.5px ui-monospace,monospace;color:#6b7280;word-break:break-all}
   summary{cursor:pointer;color:var(--muted);font-size:12.5px;font-weight:600}
   .note{display:flex;gap:8px;background:#241d10;border:1px solid #4a3a15;border-radius:9px;padding:10px 12px;font-size:12px;color:#f4d9a3;margin-top:12px}
   .alert{background:#2a1e0a;border:1px solid #7a5a1a;border-radius:12px;padding:13px 15px;margin-bottom:16px;font-size:13px;color:#ffd89b;line-height:1.55}

@@ -1,14 +1,42 @@
 import { describe, it, expect } from 'vitest';
+import { createHash } from 'node:crypto';
 import {
   DEFAULT_SERIALIZED_CONFIG,
   buildBookmarkletCore,
   buildBookmarkletUrl,
+  readPublishedFingerprint,
+  readPublishedIndexHtml,
 } from '../support/published-artifact.js';
 import { findInvisibleCharacters } from '../support/invisible-characters.js';
 
 const BOOKMARKLET_PROTOCOL = 'javascript:';
 const BOOKMARKLET_URL_LENGTH_BUDGET = 50_000;
 const REMOVED_TEST_HOOK = '__ECOM_TOOLKIT_TEST__';
+const SHA256_HEX = /^[0-9a-f]{64}$/;
+
+function sha256Of(value: string): string {
+  return createHash('sha256').update(value, 'utf8').digest('hex');
+}
+
+describe('the fingerprint that lets a user verify what they copied', () => {
+  it('matches the sha256 of the bookmarklet the page actually hands out', () => {
+    expect(readPublishedFingerprint()).toBe(sha256Of(buildBookmarkletUrl()));
+  });
+
+  it('is published as a plain sha256 digest', () => {
+    expect(readPublishedFingerprint()).toMatch(SHA256_HEX);
+  });
+
+  it('is shown on the page itself, so it can be compared without cloning the repo', () => {
+    expect(readPublishedIndexHtml()).toContain(readPublishedFingerprint());
+  });
+
+  it('changes when the bookmarklet changes, or it would guarantee nothing', () => {
+    const tampered = `${buildBookmarkletUrl()}%20`;
+
+    expect(sha256Of(tampered)).not.toBe(readPublishedFingerprint());
+  });
+});
 
 describe('the bookmarklet the page hands to the user', () => {
   it('is syntactically valid JavaScript once wrapped in its IIFE', () => {

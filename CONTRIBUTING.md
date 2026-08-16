@@ -91,7 +91,7 @@ src/
     shopify/            API, insights, media, panel, brand
 ```
 
-You edit `src/`, run `npm run build`, and commit both together. CI runs `npm run build:check`, which rebuilds and compares: if the committed `index.html` does not match what comes out of `src/`, the PR goes red.
+You edit `src/`, run `npm run build`, and commit the result together with your change. The build writes two generated files: `index.html` and `bookmarklet.sha256`, the fingerprint users compare against to prove the bookmarklet they copied is the code in this repository. CI runs `npm run build:check`, which rebuilds and compares both: if either disagrees with what comes out of `src/`, the PR goes red.
 
 Two bookmarklet constraints worth understanding before you touch the build:
 
@@ -202,8 +202,9 @@ If your idea is large, or you are not sure which side of the line it falls on, o
 - [ ] Branch off `main` with the right prefix.
 - [ ] `npm test` green.
 - [ ] Regression test added if the PR is a `fix`.
-- [ ] If you touched `src/`, you ran `npm run build` and committed the regenerated `index.html`.
+- [ ] If you touched `src/`, you ran `npm run build` and committed the regenerated `index.html` and `bookmarklet.sha256`.
 - [ ] No comments in the code, and everything that is not interface text is in English.
+- [ ] No DOM built from HTML strings: `createElement` and `textContent`.
 - [ ] You tested the bookmarklet by hand in the affected mode.
 - [ ] You filled in the PR template.
 

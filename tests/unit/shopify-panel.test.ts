@@ -67,6 +67,18 @@ function storeRoutes(bestSelling: readonly string[] = DEFAULT_BEST_SELLING): Stu
   };
 }
 
+async function renderCatalogue(products: readonly ShopifyProduct[], bestSelling: readonly string[]) {
+  const environment = openStore();
+  environment.stubFetch({
+    'products.json': { json: { products } },
+    'collections/all': { text: storefrontMarkupFor(bestSelling) },
+    default: { byteSize: 1024, contentType: 'image/jpeg' },
+  });
+  await buildStorePanel();
+
+  return environment.requireElement(PANEL_SELECTOR);
+}
+
 async function renderPanel(bestSelling?: readonly string[]) {
   const environment = openStore();
   environment.stubFetch(storeRoutes(bestSelling));
@@ -196,6 +208,17 @@ describe('buildStorePanel on a Shopify store', () => {
     expect(environment.document.querySelectorAll(PANEL_SELECTOR)).toHaveLength(0);
   });
 
+  it('opens every external link without handing the opener window over', async () => {
+    const { panel } = await renderPanel();
+
+    const externalLinks = [...panel.querySelectorAll('a[target="_blank"]')];
+
+    expect(externalLinks.length).toBeGreaterThan(0);
+    for (const link of externalLinks) {
+      expect(link.getAttribute('rel')).toContain('noopener');
+    }
+  });
+
   it('downloads the page images from its own button and reports progress underneath', async () => {
     const environment = openStore(true, '<img src="https://cdn.shopify.com/foto.jpg" data-natural-width="900">');
     environment.stubFetch(storeRoutes());
@@ -209,6 +232,44 @@ describe('buildStorePanel on a Shopify store', () => {
     expect(environment.downloads.map((download) => download.fileName)).toEqual([
       'img_1_foto.jpg',
     ]);
+  });
+});
+
+describe('buildStorePanel with product data that looks like markup', () => {
+  const QUOTED_IMAGE_URL = 'https://cdn.shopify.com/x.jpg" onerror="alert(1)';
+  const MARKUP_TITLE = '<img src=x onerror=alert(1)>';
+
+  it('keeps a quoted image url inside the src property instead of opening an attribute', async () => {
+    const panel = await renderCatalogue(
+      [
+        shopifyProduct({
+          id: 1,
+          title: 'Producto Estrella',
+          handle: 'estrella',
+          price: '1000.00',
+          imageUrl: QUOTED_IMAGE_URL,
+        }),
+      ],
+      ['estrella'],
+    );
+
+    const thumbnails = panel.querySelectorAll('img');
+
+    expect(thumbnails).toHaveLength(1);
+    expect(thumbnails[0]?.getAttribute('src')).toBe(QUOTED_IMAGE_URL);
+    expect(panel.querySelector('[onerror]')).toBeNull();
+  });
+
+  it('renders a product title that looks like a tag as text', async () => {
+    const panel = await renderCatalogue(
+      [shopifyProduct({ id: 1, title: MARKUP_TITLE, handle: 'estrella', price: '1000.00' })],
+      ['estrella'],
+    );
+
+    const row = panel.querySelector(PRODUCT_LINK_SELECTOR);
+
+    expect(row?.textContent).toContain(MARKUP_TITLE);
+    expect(row?.querySelectorAll('img')).toHaveLength(0);
   });
 });
 

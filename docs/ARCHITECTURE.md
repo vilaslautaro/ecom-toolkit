@@ -95,12 +95,28 @@ npm run build        # regenerate index.html from src/
 npm run build:check  # rebuild into a temp file and diff against the committed index.html
 ```
 
-`build.ts` bundles `src/bookmarklet/main.ts` and `src/page/main.ts` with esbuild (IIFE, es2020),
-verifies each bundle is self-contained, then injects the CSS, the core and the page script into the
-three markers in `src/page/index.html` and writes `index.html`.
+`build.ts` bundles `src/bookmarklet/main.ts` and `src/page/main.ts` with esbuild (IIFE, es2020).
+Only the bookmarklet core is minified — it becomes a URL, so its size is a product constraint; the
+page's own script stays readable. Each bundle is checked for stray module syntax, then the CSS, the
+core, the page script and the fingerprint go into the four markers in `src/page/index.html`.
 
 `build:check` runs in CI. If a pull request edits `index.html` by hand, or changes `src/` without
 rebuilding, CI fails. That is what keeps the generated file honest.
+
+## Verifiable distribution
+
+A bookmarklet is the distribution format with the weakest guarantees there is: the user pastes tens
+of thousands of unreadable characters into their browser and has no way to tell whether it matches
+the source they were shown. Open sourcing the code does not by itself close that gap.
+
+So the build computes the SHA-256 of the exact `javascript:` URL the page hands out, writes it to
+`bookmarklet.sha256`, and prints it on the page. A user compares the two; if they agree, what they
+are about to save is the audited code. `build:check` fails when the committed digest disagrees with
+the freshly built one, and an integration test recomputes it from the published `index.html`.
+
+The URL is assembled in exactly one place, `src/page/bookmarklet-url.ts`, imported by the page, the
+build and the tests. A second implementation would be a second thing to drift, and the fingerprint
+would then be attesting to something nobody actually ships.
 
 ## Testing
 

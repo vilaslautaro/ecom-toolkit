@@ -1,26 +1,11 @@
-import { DEFAULT_BOOKMARKLET_CONFIG, serializeBookmarkletConfig } from './bookmarklet-config.js';
+import { buildBookmarkletUrl, CORE_TEMPLATE_ID } from './bookmarklet-url.js';
 
-const CORE_TEMPLATE_ID = 'mald-core';
 const DRAG_BUTTON_ID = 'dragBtn';
 const OUTPUT_ID = 'bmOut';
 const COPY_BUTTON_ID = 'copyBm';
 
-const CONFIG_PLACEHOLDER = '__CFG__';
-const AUTOSTART_PLACEHOLDER = '__AUTOSTART__';
-const AUTOSTART_VALUE = 'false';
-
 const COPIED_LABEL = '✓ Copiado';
 const COPIED_LABEL_MS = 1300;
-
-function buildBookmarkletUrl(coreTemplate: string): string {
-  const config = JSON.stringify(serializeBookmarkletConfig(DEFAULT_BOOKMARKLET_CONFIG));
-
-  const core = coreTemplate
-    .split(CONFIG_PLACEHOLDER).join(config)
-    .split(AUTOSTART_PLACEHOLDER).join(AUTOSTART_VALUE);
-
-  return `javascript:${encodeURIComponent(`(function(){${core}})();`)}`;
-}
 
 function runQuietly(action: () => void): void {
   try {

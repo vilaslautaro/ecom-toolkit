@@ -1,5 +1,5 @@
 import { fetchAllProducts, fetchBestSellingHandles, isShopifyStore, storeCurrency } from './shopify-api.js';
-import { buildStoreInsights } from './store-insights.js';
+import { buildStoreInsights, publishedDateOf } from './store-insights.js';
 import { downloadPageImages, downloadPageVideos } from './page-media.js';
 import { adLibrarySearchUrl, detectStoreBrand } from './store-brand.js';
 import type { ProgressReporter, ShopifyProduct, StoreInsights } from '../domain/types.js';
@@ -54,7 +54,12 @@ function bestSellerHtml(product: ShopifyProduct, position: number, origin: strin
     ? `<img src="${imageUrl}" style="width:42px;height:42px;object-fit:cover;border-radius:7px">`
     : '<div style="width:42px;height:42px;border-radius:7px;background:#1f242c"></div>';
 
-  return `<a href="${origin}/products/${product.handle}" target="_blank" style="display:flex;gap:9px;align-items:center;margin-bottom:8px;text-decoration:none;color:#eef1f5"><div style="width:18px;color:#98a2b3;font-weight:700">${position}</div>${thumbnail}<div style="flex:1;min-width:0"><div style="font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeText(product.title)}</div><div style="font-size:11.5px;color:#7fd1a0">${escapeText(currency)} ${escapeText(price)}</div></div></a>`;
+  const publishedAt = publishedDateOf(product);
+  const publishedLine = publishedAt
+    ? `<div style="font-size:10.5px;color:#98a2b3">🗓 ${formatDate(publishedAt)}</div>`
+    : '';
+
+  return `<a href="${origin}/products/${product.handle}" target="_blank" style="display:flex;gap:9px;align-items:center;margin-bottom:8px;text-decoration:none;color:#eef1f5"><div style="width:18px;color:#98a2b3;font-weight:700">${position}</div>${thumbnail}<div style="flex:1;min-width:0"><div style="font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeText(product.title)}</div><div style="font-size:11.5px;color:#7fd1a0">${escapeText(currency)} ${escapeText(price)}</div>${publishedLine}</div></a>`;
 }
 
 function statsHtml(insights: StoreInsights): string {

@@ -90,6 +90,41 @@ describe('buildStorePanel on a Shopify store', () => {
     expect(titles[2]).toContain('Tercero');
   });
 
+  it('shows next to each best seller when the store published it', async () => {
+    const { panel } = await renderPanel();
+
+    const rows = [...panel.querySelectorAll(PRODUCT_LINK_SELECTOR)].map(
+      (link) => link.textContent ?? '',
+    );
+
+    expect(rows[0]).toContain(new Date('2024-01-23T10:00:00Z').toLocaleDateString());
+    expect(rows[1]).toContain(new Date('2025-05-10T10:00:00Z').toLocaleDateString());
+    expect(rows[2]).toContain(new Date('2026-08-06T10:00:00Z').toLocaleDateString());
+  });
+
+  it('leaves the date off a best seller whose publication date the store hides', async () => {
+    const undated: ShopifyProduct = {
+      id: 9,
+      title: 'Producto Sin Fecha',
+      handle: 'sin-fecha',
+      variants: [{ id: 90, price: '1000.00' }],
+      images: [],
+    };
+
+    const environment = openStore();
+    environment.stubFetch({
+      'products.json': { json: { products: [undated] } },
+      'collections/all': { text: storefrontMarkupFor(['sin-fecha']) },
+      default: { byteSize: 1024, contentType: 'image/jpeg' },
+    });
+    await buildStorePanel();
+
+    const row = environment.requireElement(PANEL_SELECTOR).querySelector(PRODUCT_LINK_SELECTOR);
+
+    expect(row?.textContent).toContain('Producto Sin Fecha');
+    expect(row?.textContent).not.toContain('🗓');
+  });
+
   it('leaves add ons out of the product count', async () => {
     const { text } = await renderPanel();
 

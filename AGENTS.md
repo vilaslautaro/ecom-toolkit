@@ -6,8 +6,11 @@ already broken production.
 
 ## Rules
 
-**Never edit `index.html`.** It is generated. Edit `src/`, then run `npm run build` and commit both.
-CI runs `build:check` and fails if they disagree.
+**Never edit `index.html` or `bookmarklet.sha256`.** Both are generated. Edit `src/`, then run
+`npm run build` and commit all three together. CI runs `build:check` and fails if they disagree.
+
+**Never build DOM from HTML strings.** Panels use `createElement` and `textContent`. Interpolating a
+value into markup once shipped a real `onerror` attribute from a product image URL.
 
 **No comments in code.** Naming and small functions carry the *what*; a test name carries the *why*.
 

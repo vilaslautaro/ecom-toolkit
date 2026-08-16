@@ -1,8 +1,10 @@
 import { build } from 'esbuild';
+import { createHash } from 'node:crypto';
 import { access, mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { buildBookmarkletUrl } from '../src/page/bookmarklet-url.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -11,12 +13,14 @@ const STYLES_PATH = join(ROOT, 'src', 'page', 'styles.css');
 const BOOKMARKLET_ENTRY = join(ROOT, 'src', 'bookmarklet', 'main.ts');
 const PAGE_ENTRY = join(ROOT, 'src', 'page', 'main.ts');
 const OUTPUT_PATH = join(ROOT, 'index.html');
+const FINGERPRINT_PATH = join(ROOT, 'bookmarklet.sha256');
 const DEPLOY_DIRECTORY = join(ROOT, 'dist');
 const DEPLOY_OUTPUT_PATH = join(DEPLOY_DIRECTORY, 'index.html');
 
 const STYLES_MARKER = '<!--{{STYLES}}-->';
 const BOOKMARKLET_MARKER = '<!--{{BOOKMARKLET_CORE}}-->';
 const PAGE_SCRIPT_MARKER = '<!--{{PAGE_SCRIPT}}-->';
+const FINGERPRINT_MARKER = '<!--{{BOOKMARKLET_FINGERPRINT}}-->';
 
 const CORE_SCRIPT_ID = 'mald-core';
 const CLOSING_SCRIPT_TAG = '</script>';
@@ -92,7 +96,24 @@ function injectAt(template: string, marker: string, content: string): string {
   return template.replace(marker, () => content);
 }
 
-async function renderIndexHtml(): Promise<string> {
+function coreTemplateFrom(html: string): string {
+  const openingTag = `id="${CORE_SCRIPT_ID}">`;
+  const templateStart = html.indexOf(openingTag);
+  if (templateStart === -1) throw new BuildError('el html generado no tiene la plantilla del core.');
+
+  const contentStart = templateStart + openingTag.length;
+  const contentEnd = html.indexOf(CLOSING_SCRIPT_TAG, contentStart);
+  if (contentEnd === -1) throw new BuildError('la plantilla del core quedo sin cerrar.');
+
+  return html.slice(contentStart, contentEnd);
+}
+
+function fingerprintOf(html: string): string {
+  const url = buildBookmarkletUrl(coreTemplateFrom(html));
+  return createHash('sha256').update(url, 'utf8').digest('hex');
+}
+
+async function renderIndexHtml(): Promise<{ html: string; fingerprint: string }> {
   await assertEntryPointExists(BOOKMARKLET_ENTRY);
   await assertEntryPointExists(PAGE_ENTRY);
 
@@ -112,8 +133,11 @@ async function renderIndexHtml(): Promise<string> {
     `<script type="text/plain" id="${CORE_SCRIPT_ID}">\n${core}</script>`,
   );
   const withPageScript = injectAt(withCore, PAGE_SCRIPT_MARKER, `<script>\n${pageScript}</script>`);
+  const normalized = withPageScript.replace(WINDOWS_NEWLINES, '\n');
 
-  return withPageScript.replace(WINDOWS_NEWLINES, '\n');
+  const fingerprint = fingerprintOf(normalized);
+
+  return { html: injectAt(normalized, FINGERPRINT_MARKER, fingerprint), fingerprint };
 }
 
 async function readCommittedIndexHtml(): Promise<string> {
@@ -145,20 +169,38 @@ async function checkAgainstCommittedIndex(html: string): Promise<void> {
   process.stdout.write(`build:check: ${relativeToRoot(OUTPUT_PATH)} está al día\n`);
 }
 
+async function checkFingerprintFile(fingerprint: string): Promise<void> {
+  const published = await readFile(FINGERPRINT_PATH, 'utf8').catch(() => null);
+
+  if (published === null) {
+    throw new BuildError(`falta ${relativeToRoot(FINGERPRINT_PATH)}: corré "npm run build".`);
+  }
+
+  if (published.trim() !== fingerprint) {
+    throw new BuildError(
+      `${relativeToRoot(FINGERPRINT_PATH)} no coincide con el bookmarklet generado. Corré "npm run build" y commiteá el resultado.`,
+    );
+  }
+}
+
 async function main(): Promise<void> {
-  const html = await renderIndexHtml();
+  const { html, fingerprint } = await renderIndexHtml();
 
   if (process.argv.includes(CHECK_FLAG)) {
     await checkAgainstCommittedIndex(html);
+    await checkFingerprintFile(fingerprint);
+    process.stdout.write(`build:check: huella del bookmarklet al dia (${fingerprint})\n`);
     return;
   }
 
   await writeFile(OUTPUT_PATH, html, 'utf8');
+  await writeFile(FINGERPRINT_PATH, `${fingerprint}\n`, 'utf8');
   await mkdir(DEPLOY_DIRECTORY, { recursive: true });
   await writeFile(DEPLOY_OUTPUT_PATH, html, 'utf8');
 
   process.stdout.write(
     `build: ${relativeToRoot(OUTPUT_PATH)} regenerado (${html.length} caracteres)\n` +
+      `build: huella del bookmarklet ${fingerprint}\n` +
       `build: ${relativeToRoot(DEPLOY_DIRECTORY)}/ listo para deployar\n`,
   );
 }

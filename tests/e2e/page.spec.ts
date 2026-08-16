@@ -93,6 +93,35 @@ test.describe('the generator page', () => {
     await expect(repository).toHaveAttribute('rel', /noopener/);
   });
 
+  test('publishes a fingerprint that matches the bookmarklet it hands out', async ({ page }) => {
+    const shown = (await page.locator('#fphash').textContent())?.trim() ?? '';
+    expect(shown).toMatch(/^[0-9a-f]{64}$/);
+
+    const computed = await page.evaluate(async () => {
+      const href = document.getElementById('dragBtn')?.getAttribute('href') ?? '';
+      const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(href));
+      return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, '0')).join('');
+    });
+
+    expect(computed).toBe(shown);
+  });
+
+  test('points the fingerprint at the copy of it published in the repository', async ({ page }) => {
+    const link = page.locator('#fpLink');
+
+    await expect(link).toHaveAttribute('href', /bookmarklet\.sha256$/);
+    await expect(link).toHaveAttribute('rel', /noopener/);
+  });
+
+  test('keeps the fingerprint out of the way, below everything else', async ({ page }) => {
+    const fingerprintTop = await page.locator('#fphash').evaluate((el) => el.getBoundingClientRect().top);
+    const dragButtonTop = await page.locator('#dragBtn').evaluate((el) => el.getBoundingClientRect().top);
+    const footerTop = await page.locator('#repoLink').evaluate((el) => el.getBoundingClientRect().top);
+
+    expect(fingerprintTop).toBeGreaterThan(dragButtonTop);
+    expect(fingerprintTop).toBeGreaterThan(footerTop);
+  });
+
   test('works on a phone sized viewport without overflowing sideways', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 });
     await expect(page.locator(DRAG_BUTTON)).toBeVisible();

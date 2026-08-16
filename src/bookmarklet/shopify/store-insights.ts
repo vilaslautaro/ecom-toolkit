@@ -21,9 +21,12 @@ export function isAddOnProduct(product: ShopifyProduct): boolean {
   return ADD_ON_PATTERN.test(`${product.handle} ${product.title}`);
 }
 
-function publishedDateOf(product: ShopifyProduct): Date | null {
+export function publishedDateOf(product: ShopifyProduct): Date | null {
   const published = product.published_at ?? product.created_at;
-  return published ? new Date(published) : null;
+  if (!published) return null;
+
+  const date = new Date(published);
+  return Number.isNaN(date.getTime()) ? null : date;
 }
 
 function pickBestSellers(

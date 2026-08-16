@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { buildStoreInsights, isAddOnProduct } from '../../src/bookmarklet/shopify/store-insights.js';
+import {
+  buildStoreInsights,
+  isAddOnProduct,
+  publishedDateOf,
+} from '../../src/bookmarklet/shopify/store-insights.js';
 import type { ShopifyProduct } from '../../src/bookmarklet/domain/types.js';
 import { shopifyProduct } from '../support/shopify-fixtures.js';
 
@@ -54,6 +58,46 @@ function insightsFor(bestSellingHandles: readonly string[]) {
     bestSellingHandles,
   });
 }
+
+describe('publishedDateOf', () => {
+  const baseProduct: ShopifyProduct = {
+    id: 1,
+    title: 'Producto',
+    handle: 'producto',
+    variants: [{ id: 10, price: '100.00' }],
+    images: [],
+  };
+
+  it('reads the date the store published the product', () => {
+    const date = publishedDateOf({ ...baseProduct, published_at: '2024-01-23T10:00:00Z' });
+
+    expect(date?.toISOString()).toBe('2024-01-23T10:00:00.000Z');
+  });
+
+  it('falls back to the creation date on a product the store never published', () => {
+    const date = publishedDateOf({ ...baseProduct, created_at: '2023-06-01T08:30:00Z' });
+
+    expect(date?.toISOString()).toBe('2023-06-01T08:30:00.000Z');
+  });
+
+  it('prefers the publication date over the creation date when both are there', () => {
+    const date = publishedDateOf({
+      ...baseProduct,
+      published_at: '2024-01-23T10:00:00Z',
+      created_at: '2023-06-01T08:30:00Z',
+    });
+
+    expect(date?.toISOString()).toBe('2024-01-23T10:00:00.000Z');
+  });
+
+  it('returns null when the store exposes no date at all', () => {
+    expect(publishedDateOf(baseProduct)).toBeNull();
+  });
+
+  it('returns null rather than an invalid date when the timestamp is malformed', () => {
+    expect(publishedDateOf({ ...baseProduct, published_at: 'ayer' })).toBeNull();
+  });
+});
 
 describe('isAddOnProduct', () => {
   it('treats anything priced at zero as an add on rather than a product', () => {

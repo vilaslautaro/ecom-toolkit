@@ -71,6 +71,22 @@ The suite has its own Playwright project, `visual`, kept out of `npx playwright 
 
 Screenshots go stale for real reasons and for silly ones. The silly ones are already handled: animations are off, the SHA-256 fingerprint at the foot of the page is masked because it changes with every code change, dates come from fixtures rendered in a fixed locale and timezone, and every capture waits for fonts and images. If a baseline changes after a UI change, that is the suite doing its job — regenerate it and look at the diff.
 
+## Verifying what you copied
+
+A bookmarklet is a single unreadable URL. You cannot review 36,000 characters by eye, so the page prints a SHA-256 fingerprint of it at the foot, and the same digest is committed here as [`bookmarklet.sha256`](bookmarklet.sha256). If the two match, the URL sitting in your bookmarks bar is the code in this repository.
+
+Paste the bookmarklet into a file, then hash it:
+
+```bash
+tr -d '\n' < bookmarklet.txt | sha256sum
+```
+
+**Do not run `sha256sum bookmarklet.txt` directly.** Editors append a trailing newline, the fingerprint covers the URL alone, and the two digests share nothing — you would conclude you had been served different code when you had not. `tr` strips the newline back off.
+
+Cloning skips all of it. `npm run build:check` rebuilds `index.html` from `src/` and fails if either the committed page or the committed fingerprint disagrees, which is also what CI runs on every pull request. `npm run serve` then gives you the page with no hosting in the trust chain at all.
+
+Worth being precise about what this proves: that what you copied matches what is published here. It says nothing about whether what is published here deserves your trust. That part is reading the code — which is the reason it is 40 KB with no runtime dependencies.
+
 ## Contributing
 
 The project is MIT and accepts PRs. Read [CONTRIBUTING.md](CONTRIBUTING.md) before your first one: it covers the branch, commit and test conventions, and what falls inside the scope and what does not.
